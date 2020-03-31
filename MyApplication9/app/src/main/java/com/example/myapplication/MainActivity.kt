@@ -5,17 +5,54 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 
 import kotlinx.android.synthetic.main.activity_main.*
 
+import android.os.Handler
+
+
 class MainActivity : AppCompatActivity() {
     var count = 0
+    private var mHandler: Handler? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         textView.text = count.toString()
+        mHandler =  Handler()
+        button2.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when (event?.action) {
+                    MotionEvent.ACTION_DOWN -> startRepeatingTask()
+                    MotionEvent.ACTION_UP -> stopRepeatingTask()
+                }
+
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
+    }
+
+    var mStatusChecker: Runnable = object : Runnable {
+        override fun run() {
+            try {
+                increaseCount() //this function can change value of mInterval.
+            } finally {
+                // 100% guarantee that this always happens, even if
+                // your update method throws an exception
+                mHandler?.postDelayed(this, 500)
+            }
+        }
+    }
+
+    fun startRepeatingTask() {
+        mStatusChecker.run()
+    }
+
+    fun stopRepeatingTask() {
+        mHandler?.removeCallbacks(mStatusChecker)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -34,8 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
             }
     fun buttonClicked(view: View){
-        count += 1
-        textView.text = count.toString()
+        increaseCount()
 
     }
     fun resetClicked():Boolean{
@@ -43,4 +79,9 @@ class MainActivity : AppCompatActivity() {
         textView.text = count.toString()
         return true
     }
+    fun increaseCount(){
+        count += 1
+        textView.text = count.toString()
+    }
+
 }
