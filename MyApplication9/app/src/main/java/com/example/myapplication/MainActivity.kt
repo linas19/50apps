@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
                     MotionEvent.ACTION_DOWN -> startRepeatingTask()
                     MotionEvent.ACTION_UP -> stopRepeatingTask()
                 }
-
                 return v?.onTouchEvent(event) ?: true
             }
         })
