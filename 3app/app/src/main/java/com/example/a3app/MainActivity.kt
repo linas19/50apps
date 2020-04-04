@@ -23,12 +23,11 @@ class MainActivity : AppCompatActivity() {
 
                 current = formatted;
                 println(formatted)
-                println(parsed)
                 editText4.setText(formatted);
             }
         }
         seekBar.setProgress(15)
-        tipPercentage.text = seekBar.progress.toString()
+        tipPercentage.text = "Tip(" + seekBar.progress.toString() + "%)"
         seekBar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(
@@ -36,8 +35,8 @@ class MainActivity : AppCompatActivity() {
                 progress: Int, fromUser: Boolean
             ) {
 
-                tipPercentage.text = seekBar.progress.toString()
-
+                tipPercentage.text = "Tip(" + seekBar.progress.toString() + "%)"
+//                tipPercentageNumber.text = number.toString()
                 // write custom code for progress is changed
             }
 
